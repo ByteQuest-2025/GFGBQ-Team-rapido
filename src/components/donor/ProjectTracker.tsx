@@ -1,8 +1,16 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle, Circle, Clock, AlertCircle, ChevronRight } from 'lucide-react';
+import { CheckCircle, Circle, Clock, AlertCircle, Heart, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Project, Milestone } from '@/data/mockData';
+import { useDonate } from '@/hooks/useDonate';
+import { useAccount } from 'wagmi';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { toast } from '@/hooks/use-toast';
 
 interface ProjectTrackerProps {
   project: Project;
@@ -121,6 +129,12 @@ const MilestoneStep = ({
 };
 
 const ProjectTracker = ({ project }: ProjectTrackerProps) => {
+  const [donateAmount, setDonateAmount] = useState('0.1');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { isConnected } = useAccount();
+  const { openConnectModal } = useConnectModal();
+  const { donate, isPending, isConfirming, isSuccess, error, reset } = useDonate();
+
   const completedMilestones = project.milestones.filter(m => m.status === 'completed').length;
   const overallProgress = (completedMilestones / project.milestones.length) * 100;
 
@@ -130,6 +144,34 @@ const ProjectTracker = ({ project }: ProjectTrackerProps) => {
     environment: 'bg-success/10 text-success',
     community: 'bg-secondary/10 text-secondary',
   };
+
+  const handleDonate = () => {
+    if (!isConnected) {
+      openConnectModal?.();
+      return;
+    }
+    donate(project.id, donateAmount);
+  };
+
+  // Show success toast
+  if (isSuccess) {
+    toast({
+      title: "Donation Successful!",
+      description: `You donated ${donateAmount} MATIC to ${project.title}`,
+    });
+    setIsDialogOpen(false);
+    reset();
+  }
+
+  // Show error toast
+  if (error) {
+    toast({
+      title: "Donation Failed",
+      description: error.message,
+      variant: "destructive",
+    });
+    reset();
+  }
 
   return (
     <Card className="shadow-card overflow-hidden">
@@ -197,6 +239,47 @@ const ProjectTracker = ({ project }: ProjectTrackerProps) => {
               totalMilestones={project.milestones.length}
             />
           ))}
+        </div>
+
+        {/* Donate Button */}
+        <div className="mt-6 pt-4 border-t border-border">
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="w-full gap-2" size="lg">
+                <Heart className="h-5 w-5" />
+                Donate to This Project
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Donate to {project.title}</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 pt-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Amount (MATIC)</label>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    min="0.01"
+                    value={donateAmount}
+                    onChange={(e) => setDonateAmount(e.target.value)}
+                    placeholder="0.1"
+                  />
+                </div>
+                <Button 
+                  onClick={handleDonate} 
+                  className="w-full gap-2"
+                  disabled={isPending || isConfirming}
+                >
+                  {(isPending || isConfirming) && <Loader2 className="h-4 w-4 animate-spin" />}
+                  {isPending ? 'Confirm in Wallet...' : isConfirming ? 'Processing...' : `Donate ${donateAmount} MATIC`}
+                </Button>
+                <p className="text-xs text-muted-foreground text-center">
+                  Donations are sent on Polygon network
+                </p>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </CardContent>
     </Card>
