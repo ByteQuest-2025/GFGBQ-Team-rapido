@@ -1,5 +1,6 @@
-import { Wallet, Shield, Heart } from 'lucide-react';
+import { Shield, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 interface NavbarProps {
   activeView: 'donor' | 'admin' | 'validator';
@@ -52,11 +53,7 @@ const Navbar = ({ activeView, onViewChange }: NavbarProps) => {
           </Button>
         </nav>
 
-        <Button variant="outline" className="gap-2 border-primary/30 hover:bg-primary/10 hover:border-primary">
-          <Wallet className="h-4 w-4" />
-          <span className="hidden sm:inline">Connect Wallet</span>
-          <span className="sm:hidden">Connect</span>
-        </Button>
+        <ConnectButton />
       </div>
     </header>
   );
