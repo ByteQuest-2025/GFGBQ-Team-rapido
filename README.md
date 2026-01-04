@@ -26,6 +26,24 @@ Donors can follow their specific contribution through a vertical timeline—from
 
 ---
 
+<h3 align="center">📱 Application Gallery</h3>
+
+<p align="center">
+  <img src="./Screenshots/Screenshot 2026-01-04 110338.png" width="31%" />
+  <img src="./Screenshots/Screenshot 2026-01-04 110350.png" width="31%" />
+  <img src="./Screenshots/Screenshot 2026-01-04 110416.png
+" width="31%" />
+</p>
+<p align="center">
+  <img src="./Screenshots/Screenshot 2026-01-04 110428.png" width="45%" />
+  <img src="./Screenshots/Screenshot 2026-01-04 110450.png
+" width="45%" />
+</p>
+
+<p align="center">
+  <em>Visualizing Transparency: Donor Dashboard, NGO Portal, and Validator Interface</em>
+</p>
+
 ## 🛠️ Tech Stack
 
 | Component | Technology |
