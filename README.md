@@ -5,7 +5,7 @@
 * **Project Name:** VeriFund (ImpactTraceTrust)
 * **Team Name:** Team Rapido
 * **Deployed Link:** [https://impact-trace-trust.vercel.app/](https://impact-trace-trust.vercel.app/)
-* **2-Minute Demonstration Video Link:** [INSERT_YOUR_YOUTUBE_OR_LOOM_LINK_HERE]
+* **2-Minute Demonstration Video Link:** 
 * **PPT Link:** https://docs.google.com/presentation/d/1f3VMV9VxtRkARgQZ-ycxZr1dO00q7hdT/edit?usp=sharing&ouid=116771220769706262522&rtpof=true&sd=true
 
 ---
